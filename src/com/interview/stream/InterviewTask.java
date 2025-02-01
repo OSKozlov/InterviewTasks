@@ -1,4 +1,4 @@
-package com.interviewtask.stream;
+package com.interview.stream;
 
 import java.util.*;
 import java.util.function.Function;
