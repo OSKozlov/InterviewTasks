@@ -6,68 +6,52 @@ import java.util.*;
  Compute Average Salary by Department
 */
 
-class Worker2 {
-    String name;
-    int departmentId;
-    double salary;
-
-    public Worker2(String name, int departmentId, double salary) {
-        this.name = name;
-        this.departmentId = departmentId;
-        this.salary = salary;
-    }
-
-    public int getDepartmentId() {
-        return departmentId;
-    }
-
-    public double getSalary() {
-        return salary;
-    }
-}
-
 public class AverageSalaryCalculator2 {
 
-    public static Map<Integer, Double> calculateAverageByDepartments(List<Worker2> workers) {
-        Map<Integer, List<Worker2>> grouppedByDept = new HashMap<>();
-        for(Worker2 worker2 : workers) {
-            if (!grouppedByDept.containsKey(worker2.getDepartmentId())) {
-                List<Worker2> list = new ArrayList<>();
-                list.add(worker2);
-                grouppedByDept.put(worker2.getDepartmentId(), list);
-            } else {
-                List<Worker2> list = grouppedByDept.get(worker2.getDepartmentId());
-                list.add(worker2);
+    public static Map<Integer, Double> calculateAverageByDepartments(List<Worker> workers) {
+        // Группируем сотрудников по департаментам
+        // для этого создаем мапу где ключ номер департамента
+        // и значение это список сотрудников
+        Map<Integer, List<Worker>> groupedByDept = new HashMap<>();
+        for(Worker worker : workers) {
+            if (worker==null) continue;
+            if (!groupedByDept.containsKey(worker.getDepartmentId())) {
+                // Если нет в мапе департамента то добавляем его
+                // и создаем новый список сотрудников
+                groupedByDept.put(worker.getDepartmentId(), new ArrayList<>());
             }
+            // Достаем список сотрудников по номеру департамента
+            // и добавляем нового сотрудника в список
+            groupedByDept.get(worker.getDepartmentId()).add(worker);
         }
 
         Map<Integer, Double> averages = new HashMap<>();
-        for(Map.Entry<Integer, List<Worker2>> entry : grouppedByDept.entrySet()) {
-            List<Worker2> list = entry.getValue();
+        for(Map.Entry<Integer, List<Worker>> entry : groupedByDept.entrySet()) {
             double average = 0;
-            for(Worker2 w2 : list) {
-                average = average + w2.getSalary();
+            for(Worker w : entry.getValue()) {
+                average = average + w.getSalary();
             }
-            average = average/list.size();
-            averages.put(entry.getKey(), average);
+            averages.put(entry.getKey(), average/entry.getValue().size());
         }
         return averages;
     }
 
     public static void main(String[] args) {
-        Worker2 worker1 = new Worker2("Pupsik", 1, 1200);
-        Worker2 worker2 = new Worker2("Patrik", 2, 1300);
-        Worker2 worker3 = new Worker2("Belkin", 1, 2200);
-        Worker2 worker4 = new Worker2("Artist", 3, 4200);
-        Worker2 worker5 = new Worker2("Boris", 3, 1200);
-        Worker2 worker6 = new Worker2("Pidor", 2, 7200);
-        List<Worker2> workers = new ArrayList<>();
+        Worker worker1 = new Worker("Pupsik", 1, 1200);
+        Worker worker2 = new Worker("Patrik", 2, 1300);
+        Worker worker3 = new Worker("Belkin", 1, 2200);
+        Worker worker4 = new Worker("Artist", 3, 4200);
+        Worker worker5 = new Worker("Boris", 3, 1200);
+        Worker worker6 = new Worker("Pidor", 3, 7200);
+        Worker worker7 = null;
+        List<Worker> workers = new ArrayList<>();
         workers.add(worker1);
         workers.add(worker2);
         workers.add(worker3);
         workers.add(worker4);
         workers.add(worker5);
         workers.add(worker6);
+        workers.add(worker7);
 
         Map<Integer, Double> averageSalaryByDept = calculateAverageByDepartments(workers);
 
